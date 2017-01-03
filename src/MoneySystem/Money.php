@@ -30,35 +30,67 @@ class Money extends PluginBase implements Listener {
 			
 			case "setmoney":
 				if(isset($args[0])) {
-					$w = $args[0];
+					$p = $args[0];
 					
 					if(isset($args[1])) {
-						$m = $args[1];
-						$p = $this->getServer()->getPlayer($w);
-						$this->addMoney($w, $m);
-						$sender->sendMessage("You have set $w's Money to $m");
-							if($p === true) {
-								$p->sendMessage("Your money has been set to $m!");
+						$c = $args[1];
+						$pl = $this->getServer()->getPlayer($p);
+						$this->setMoney($p, $c);
+						$sender->sendMessage("You have set $p's Money to $c");
+							if($pl === true) {
+								$pl->sendMessage("Your money has been set to $c!");
 							}
 					}
 					
 				}
-				
-				
-				
-				
+				else {
+					$sender->sendMessage("Usage: /setmoney {player} {amount}");
+				}
+				return true;
+			break;
+			
+			case "addmoney":
+				if(isset($args[0])) {
+					$p = $args[0];
+						
+						if(isset($args[1])) {
+							$c = $args[1];
+							$pl = $this->getServer()->getPlayer($p);
+							$this->onAdd($p, $c);
+							$sender->sendMessage("You have set added $m to $p!");
+								if($pl === true) {
+									$n = $sender->getName();
+								$pl->sendMessage("$n has added $c to your account!");
+							}
+						}
+				}
+				else {
+					$sender->sendMessage("Usage: /addmoney {player} {money}");
+				}
 				return true;
 			break;
 		}
 	}
 	
-	public function addMoney($p, $c) {
+	public function setMoney($p, $c) {
 		if($this->cfg->get($p) === true) {
 			$this->cfg->set($p, $c);
 			$this->cfg->save();
 		}
 		else {
 			$this->cfg->set($p, $c);
+			$this->cfg->save();
+		}
+	}
+	
+	public function onAdd($p, $c) {
+		$if($this->cfg->get($p) === false) {
+			$pl = $this->getServer()->getPlayer($p);
+			$this->cfg->set($p, $c);
+			$this->cfg->save();
+		}
+		else {
+			$this->cfg->set($p, $pl + $c);
 			$this->cfg->save();
 		}
 	}
