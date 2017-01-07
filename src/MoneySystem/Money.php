@@ -94,6 +94,5 @@ class Money extends PluginBase implements Listener {
 			$this->cfg->save();
 		}
 	}
-	
-	
+		
 }
